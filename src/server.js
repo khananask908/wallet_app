@@ -3,16 +3,23 @@ import dotenv from "dotenv";
 import { sql } from "./config/db.js";
 import limiterrate from "./middleware/limiterrate.js";
 //import limiterrate from "./middleware/limiterrate.js";
+import job from "./config/cron.js";
 
 dotenv.config();
 
 const app = express();
+if (process.env.NODE_ENV==="production")
+job.start();
 
 //middle ware 
 
 app.use(express.json()); app.use(limiterrate);
 //app.use(limiterrate)
 
+
+app.use("/api/health", ( req, res )=> {
+  res.status(200).json({status:ok})
+})
 /*      
 app.use(    (req, res, next) => {
     console.log("hey we hit with method", req.method);
